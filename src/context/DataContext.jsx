@@ -7,7 +7,7 @@ import { format } from "date-fns";
 
 const DataContext = createContext({})
 
-export const DataProvider = ({childern}) => {
+export const DataProvider = ({children}) => {
     const [posts, setPosts] = useState([]);
     const [search, setSearch] = useState('');
     const [searchResults, setSearchResults] = useState([]);
@@ -105,7 +105,7 @@ export const DataProvider = ({childern}) => {
             posts, handleDelete,
             handleEdit, editBody, setEditBody, editTitle, setEditTitle
         }}>
-            {childern}
+            {children}
         </DataContext.Provider>
     )
 }

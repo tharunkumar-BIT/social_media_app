@@ -12,6 +12,7 @@ import PostLayout from "./PostLayout";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import api from "./api/posts";
+import EditPost from "./EditPost";
 
 function App() {
 
@@ -21,6 +22,8 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [postTitle, setPostTitle] = useState('');
   const [postBody, setPostBody] = useState('');
+  const [editTitle, setEditTitle] = useState('');
+  const [editBody, setEditBody] = useState('');
   const navigate = useNavigate();
 
   useEffect(()=> {
@@ -59,29 +62,45 @@ function App() {
     const newPost = { id, title: postTitle, datetime, body: postBody};
     try{
       const response = await api.post('/posts', newPost);
-    const allPosts = [...posts, response.data];
-    setPosts(allPosts);
-    setPostTitle('');
-    setPostBody('');
-    navigate('/');
+      const allPosts = [...posts, response.data];
+      setPosts(allPosts);
+      setPostTitle('');
+      setPostBody('');
+      navigate('/');
     }
-    catch{
-      if(err.response){
-        console.log(err.response.data);     
-        console.log(err.response.status);     
-        console.log(err.response.headers);     
-      }
-      else{
+    catch(err){
         console.log(`Error: ${err.message}`);
-      }
     }
   }
 
-  const handleDelete = (id) => {
-    const postsList = posts.filter(post => post.id !== id);
-    setPosts(postsList);
-    navigate('/');
+  const handleEdit = async (id) => {
+    const datetime = format(new Date(), 'MMMM dd, yyyy PP');
+    const updatedPost = { id, title: editTitle, datetime, body: editBody};
+    try{
+      const response = await api.put(`/posts/${id}`, updatedPost);
+      setPosts(posts.map(post => post.id === id ? {...response.data} : post));
+      setPostTitle('');
+      setPostBody('');
+      navigate('/');
+    }
+    catch(err){
+      console.log(`Error: ${err.message}`);
+    }
   }
+
+  const handleDelete = async (id) => {
+    try{
+      await api.delete(`/posts/${id}`);
+      const postsList = posts.filter(post => post.id !== id);
+      setPosts(postsList);
+      navigate('/');
+    }
+    catch(err){
+      console.log(`Error: ${err.message}`);
+    }
+  }
+
+  
 
 
   return(
@@ -98,8 +117,19 @@ function App() {
           postBody={postBody}
           setPostBody={setPostBody}
           />}/>
-          <Route path=":id" element={<PostPage posts = {posts} handleDelete = {handleDelete}/>}/>
+          <Route path=":id" element={<PostPage 
+            posts = {posts} 
+            handleDelete = {handleDelete} 
+          />}/>
         </Route>
+        <Route path="/edit/:id" element ={<EditPost
+            posts={posts}
+            handleEdit={handleEdit}
+            editBody={editBody}
+            setEditBody={setEditBody}
+            editTitle={editTitle}
+            setEditTitle={setEditTitle}
+          />}/>
         <Route path="about" element = {<About />}/>
         <Route path="*" element = {<Missing />} />
       </Routes>

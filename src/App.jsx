@@ -11,41 +11,38 @@ import Post from "./Post";
 import PostLayout from "./PostLayout";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
+import api from "./api/posts";
 
 function App() {
 
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      title: "My first post",
-      datetime: "July 01, 2021 11:17:36 AM",
-      body: "Made a video about Tesla Q1 results"
-    },
-    {
-      id: 2,
-      title: "My 2nd post",
-      datetime: "July 01, 2021 11:17:36 AM",
-      body: "I attended a blockchain event"
-    },
-    {
-      id: 3,
-      title: "My 3rd post",
-      datetime: "July 01, 2021 11:17:36 AM",
-      body: "I am learning React"
-    },
-    {
-      id: 4,
-      title: "My 4th post",
-      datetime: "July 01, 2021 11:17:36 AM",
-      body: "Going to sleep"
-    }
-  ])
+  const [posts, setPosts] = useState([]);
 
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [postTitle, setPostTitle] = useState('');
   const [postBody, setPostBody] = useState('');
   const navigate = useNavigate();
+
+  useEffect(()=> {
+    const fetchPosts = async () => {
+      try{
+        const response = await api.get('/posts');
+        setPosts(response.data);
+      }
+      catch(err){
+        if(err.response){
+          console.log(err.response.data);     
+          console.log(err.response.status);     
+          console.log(err.response.headers);     
+        }
+        else{
+          console.log(`Error: ${err.message}`);
+        }
+      }
+    }
+
+    fetchPosts();
+  }, [])
 
   useEffect(()=>{
     const filteredResults = posts.filter((post)=> (
@@ -55,16 +52,29 @@ function App() {
     setSearchResults(filteredResults.reverse());
   }, [posts, search])
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const id = posts.length ? posts[posts.length - 1].id + 1 : 1;
-    const datetime = format(new Date(), 'MMMM DD, YYYY PP');
+    const datetime = format(new Date(), 'MMMM dd, yyyy PP');
     const newPost = { id, title: postTitle, datetime, body: postBody};
-    const allPosts = {...posts, newPost};
+    try{
+      const response = await api.post('/posts', newPost);
+    const allPosts = [...posts, response.data];
     setPosts(allPosts);
     setPostTitle('');
     setPostBody('');
     navigate('/');
+    }
+    catch{
+      if(err.response){
+        console.log(err.response.data);     
+        console.log(err.response.status);     
+        console.log(err.response.headers);     
+      }
+      else{
+        console.log(`Error: ${err.message}`);
+      }
+    }
   }
 
   const handleDelete = (id) => {

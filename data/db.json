@@ -1,0 +1,34 @@
+{
+  "posts": [
+    {
+      "id": "1",
+      "title": "My first post",
+      "datetime": "July 01, 2021 11:17:36 AM",
+      "body": "Made a video about Tesla Q1 results"
+    },
+    {
+      "id": "2",
+      "title": "My 2nd post",
+      "datetime": "July 01, 2021 11:17:36 AM",
+      "body": "I attended a blockchain event"
+    },
+    {
+      "id": "3",
+      "title": "My 3rd post",
+      "datetime": "July 01, 2021 11:17:36 AM",
+      "body": "I am learning React"
+    },
+    {
+      "id": "4",
+      "title": "My 4th post",
+      "datetime": "July 01, 2021 11:17:36 AM",
+      "body": "Going to sleep"
+    },
+    {
+      "id": "41",
+      "title": "hiiii",
+      "datetime": "February 16, 2025 Feb 16, 2025",
+      "body": "my post\n"
+    }
+  ]
+}

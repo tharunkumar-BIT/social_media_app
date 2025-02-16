@@ -1,7 +1,7 @@
 import React from 'react'
 
 const NewPost = ({
-  handleSubmit, postTitle, SetPostTitle, postBody, setPostBody
+  handleSubmit, postTitle, setPostTitle, postBody, setPostBody
 }) => {
   return (
     <main className='NewPost'>
@@ -13,7 +13,7 @@ const NewPost = ({
                   required
                   value={postTitle}
                   placeholder='Title'
-                  onChange={(e)=> SetPostTitle(e.target.value)}
+                  onChange={(e)=> setPostTitle(e.target.value)}
           />
           <label htmlFor="postBody">Post:</label>
           <textarea id="postBody"

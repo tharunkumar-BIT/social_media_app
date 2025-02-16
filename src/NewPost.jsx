@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import DataContext from './context/DataContext'
 
-const NewPost = ({
-  handleSubmit, postTitle, setPostTitle, postBody, setPostBody
-}) => {
+const NewPost = () => {
+  const {handleSubmit, postTitle, setPostTitle, postBody, setPostBody} = useContext(DataContext)
   return (
     <main className='NewPost'>
         <h2>NewPost</h2>

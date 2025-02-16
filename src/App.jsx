@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import api from "./api/posts";
 import EditPost from "./EditPost";
 import useWindowSize from "./hooks/useWindowSize";
+import useAxiosFetch from "./hooks/useAxiosFetch";
 
 function App() {
 
@@ -26,27 +27,32 @@ function App() {
   const [editBody, setEditBody] = useState('');
   const navigate = useNavigate();
   const {width} = useWindowSize();
+  const {data, fetchError, isLoading} = useAxiosFetch('http://localhost:3500/posts');
 
-  useEffect(()=> {
-    const fetchPosts = async () => {
-      try{
-        const response = await api.get('/posts');
-        setPosts(response.data);
-      }
-      catch(err){
-        if(err.response){
-          console.log(err.response.data);     
-          console.log(err.response.status);     
-          console.log(err.response.headers);     
-        }
-        else{
-          console.log(`Error: ${err.message}`);
-        }
-      }
-    }
+  // useEffect(()=> {
+  //   const fetchPosts = async () => {
+  //     try{
+  //       const response = await api.get('/posts');
+  //       setPosts(response.data);
+  //     }
+  //     catch(err){
+  //       if(err.response){
+  //         console.log(err.response.data);     
+  //         console.log(err.response.status);     
+  //         console.log(err.response.headers);     
+  //       }
+  //       else{
+  //         console.log(`Error: ${err.message}`);
+  //       }
+  //     }
+  //   }
 
-    fetchPosts();
-  }, [])
+  //   fetchPosts();
+  // }, [])
+
+  useEffect(()=>{
+    setPosts(data);
+  },[data])
 
   useEffect(()=>{
     const filteredResults = posts.filter((post)=> (
@@ -109,7 +115,11 @@ function App() {
       <Header title="Social Media" width={width}/>
       <Nav search={search} setSearch={setSearch}/>
       <Routes>
-        <Route path="/" element = {<Home posts = {searchResults}/>}/>
+        <Route path="/" element = {<Home 
+          posts = {searchResults}
+          fetchError = {fetchError}
+          isLoading = {isLoading}
+        />}/>
         <Route path="post">
           <Route index element = {<NewPost 
           handleSubmit={handleSubmit}

@@ -1,4 +1,4 @@
-import {Link, Navigate, Route, Routes } from "react-router-dom";
+import {Link, Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import About from "./About";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -45,6 +45,7 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [postTitle, setPostTitle] = useState('');
   const [postBody, setPostBody] = useState('');
+  const navigate = useNavigate();
 
   useEffect(()=>{
     const filteredResults = posts.filter((post)=> (
@@ -63,10 +64,13 @@ function App() {
     setPosts(allPosts);
     setPostTitle('');
     setPostBody('');
+    navigate('/');
   }
 
-  const handleDelete = (e) => {
-    
+  const handleDelete = (id) => {
+    const postsList = posts.filter(post => post.id !== id);
+    setPosts(postsList);
+    navigate('/');
   }
 
 
@@ -84,7 +88,7 @@ function App() {
           postBody={postBody}
           setPostBody={setPostBody}
           />}/>
-          <Route path="id" element={<PostPage posts = {posts} handleDelete = {handleDelete}/>}/>
+          <Route path=":id" element={<PostPage posts = {posts} handleDelete = {handleDelete}/>}/>
         </Route>
         <Route path="about" element = {<About />}/>
         <Route path="*" element = {<Missing />} />

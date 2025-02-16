@@ -13,11 +13,11 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import api from "./api/posts";
 import EditPost from "./EditPost";
+import useWindowSize from "./hooks/useWindowSize";
 
 function App() {
 
   const [posts, setPosts] = useState([]);
-
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [postTitle, setPostTitle] = useState('');
@@ -25,6 +25,7 @@ function App() {
   const [editTitle, setEditTitle] = useState('');
   const [editBody, setEditBody] = useState('');
   const navigate = useNavigate();
+  const {width} = useWindowSize();
 
   useEffect(()=> {
     const fetchPosts = async () => {
@@ -105,7 +106,7 @@ function App() {
 
   return(
     <div className="App"> 
-      <Header title="Social Media"/>
+      <Header title="Social Media" width={width}/>
       <Nav search={search} setSearch={setSearch}/>
       <Routes>
         <Route path="/" element = {<Home posts = {searchResults}/>}/>

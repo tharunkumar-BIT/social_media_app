@@ -72,14 +72,8 @@ social_media_app/
 
    The application will be available at `http://localhost:5173/`.
 
-## 📸 Screenshots
-
-*Add screenshots here to showcase the application's UI.*
 
 ## 🤝 Contributing
 
 Contributions are welcome! Please fork the repository and submit a pull request for any enhancements or bug fixes.
 
-## 📄 License
-
-This project is open-source and available under the [MIT License](LICENSE).
